@@ -29,27 +29,29 @@ public class VoyageServiceImpl implements IVoyageService {
 
     public void affecterTrainAVoyage(Long idTrain, Long idVoyage) {
 
-        Train t = trainRepository.findById(idTrain).get();
-        Voyage v = voyageRepository.findById(idVoyage).get();
-        v.setTrain(t);
-        voyageRepository.save(v);
+        Train t = trainRepository.findById(idTrain).orElse(null);
+        Voyage v = voyageRepository.findById(idVoyage).orElse(null);
+        if(v!=null){
+            v.setTrain(t);
+            voyageRepository.save(v);
+        }
+
+
     }
 
     @Override
     public List<Voyage> recupererAll() {
-        List<Voyage> list = (List<Voyage>) voyageRepository.findAll();
-        return list;
+        return (List<Voyage>) voyageRepository.findAll();
     }
 
     @Override
     public Voyage recupererVoyageParId(long idVoyage) {
-        Voyage v = voyageRepository.findById(idVoyage).orElse(null);
-        return v;
+        return voyageRepository.findById(idVoyage).orElse(null);
     }
 
     @Override
     public void supprimerVoyage(Voyage v) {
-        //TODO method
+        voyageRepository.delete(v);
     }
 
 }
